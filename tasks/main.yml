@@ -1,0 +1,45 @@
+---
+# tasks/main.yml
+
+- name: apt_key | add newrelic repository key
+  apt_key:
+    url: "https://download.newrelic.com/548C16BF.gpg"
+
+- name: apt_repository | add thirdparty repositories
+  apt_repository:
+    repo: "{{ item }}"
+    state: "present"
+  with_items:
+    - "deb http://apt.newrelic.com/debian/ newrelic non-free"
+
+- name: apt | install packages
+  apt:
+    name: "{{ item }}"
+    state: "present"
+    update_cache: "yes"
+  with_items:
+    - "newrelic-sysmond"
+
+- name: user | add newrelic user to docker group if docker is presented
+  user:
+    name: "{{ item }}"
+    append: "yes"
+    groups: "docker"
+  with_items:
+    - "newrelic"
+  ignore_errors: "yes"
+
+- name: lineinfile | update newrelic configuration
+  lineinfile:
+    dest: "/etc/newrelic/nrsysmond.cfg"
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items:
+    - { key: "hostname", value: "iprice-{{ app_env }}-{{ group_names | join('') }}" }
+    - { key: "license_key", value: "{{ newrelic.license }}" }
+
+- name: service | restart newrelic-sysmond daemon
+  service:
+    name: "newrelic-sysmond"
+    state: "restarted"
+    enabled: "yes"
