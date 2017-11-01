@@ -1,7 +1,7 @@
-Role Name
+Ansible role newrelic-sys
 =========
 
-A brief description of the role goes here.
+Ansible role for newrelic system monitoring
 
 Requirements
 ------------
@@ -25,7 +25,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: newrelic-sys, newrelic.license: <license-key> }
 
 License
 -------

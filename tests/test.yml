@@ -1,5 +1,7 @@
 ---
-- hosts: localhost
-  remote_user: root
+# tests/main.yml
+
+- hosts: "localhost"
+  remote_user: "root"
   roles:
-    - newrelic-sys
+    - "newrelic-sys"
