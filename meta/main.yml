@@ -10,8 +10,8 @@ galaxy_info:
   github_branch: "master"
   platforms:
   - name: "Ubuntu"
-     versions:
-     - "trusty"
+    versions:
+      - "trusty"
 
   galaxy_tags:
     - "newrelic-sysmond"
