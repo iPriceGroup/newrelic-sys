@@ -1,16 +1,23 @@
 ---
 # tasks/main.yml
 
+- name: lineinfile | update licence key
+  lineinfile:
+    path: "/etc/newrelic-infra.yml"
+    line: "license_key: {{ newrelic.license }}"
+    state: "present"
+    create: "yes"
+
 - name: apt_key | add newrelic repository key
   apt_key:
-    url: "https://download.newrelic.com/548C16BF.gpg"
+    url: "https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg"
 
 - name: apt_repository | add thirdparty repositories
   apt_repository:
     repo: "{{ item }}"
     state: "present"
   with_items:
-    - "deb http://apt.newrelic.com/debian/ newrelic non-free"
+    - "deb [arch=amd64] http://download.newrelic.com/infrastructure_agent/linux/apt trusty main"
 
 - name: apt | install packages
   apt:
@@ -18,7 +25,7 @@
     state: "present"
     update_cache: "yes"
   with_items:
-    - "newrelic-sysmond"
+    - "newrelic-infra"
 
 - name: user | add newrelic user to docker group if docker is presented
   user:
@@ -40,6 +47,6 @@
 
 - name: service | restart newrelic-sysmond daemon
   service:
-    name: "newrelic-sysmond"
+    name: "newrelic-infra"
     state: "restarted"
     enabled: "yes"
