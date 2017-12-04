@@ -4,9 +4,12 @@
 - name: lineinfile | update licence key
   lineinfile:
     dest: "/etc/newrelic-infra.yml"
-    line: "license_key: {{ newrelic.license }}"
+    line: "{{ item.key }}: {{ item.value }}"
     state: "present"
     create: "yes"
+  with_items:
+    - { key: "display_name", value: "iprice-{{ app_env }}-{{ group_names | join('') }}" }
+    - { key: "license_key", value: "{{ newrelic.license }}" }
 
 - name: apt_key | add newrelic repository key
   apt_key:
@@ -35,15 +38,6 @@
   with_items:
     - "newrelic"
   ignore_errors: "yes"
-
-- name: lineinfile | update newrelic configuration
-  lineinfile:
-    dest: "/etc/newrelic/nrsysmond.cfg"
-    regexp: "^{{ item.key }}="
-    line: "{{ item.key }}={{ item.value }}"
-  with_items:
-    - { key: "hostname", value: "iprice-{{ app_env }}-{{ group_names | join('') }}" }
-    - { key: "license_key", value: "{{ newrelic.license }}" }
 
 - name: service | restart newrelic-sysmond daemon
   service:
