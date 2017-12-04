@@ -3,7 +3,7 @@
 
 - name: lineinfile | update licence key
   lineinfile:
-    path: "/etc/newrelic-infra.yml"
+    dest: "/etc/newrelic-infra.yml"
     line: "license_key: {{ newrelic.license }}"
     state: "present"
     create: "yes"
