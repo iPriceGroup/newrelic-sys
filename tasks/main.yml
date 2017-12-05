@@ -8,7 +8,7 @@
     state: "present"
     create: "yes"
   with_items:
-    - { key: "display_name", value: "iprice-{{ app_env }}-{{ group_names | join('') }}" }
+    - { key: "display_name", value: "{{ hostname | default(ansible_hostname) }}" }
     - { key: "license_key", value: "{{ newrelic.license }}" }
 
 - name: apt_key | add newrelic repository key
