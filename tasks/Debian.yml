@@ -1,5 +1,5 @@
 ---
-# tasks/debian-based.yml
+# tasks/Debian.yml
 
 - name: apt_key | add newrelic repository key
   apt_key:

@@ -1,5 +1,5 @@
 ---
-# tasks/redhat-based.yml
+# tasks/RedHat.yml
 
 - name: yum | add new relic repo key
   shell: "curl -o /etc/yum.repos.d/newrelic-infra.repo https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64/newrelic-infra.repo"
