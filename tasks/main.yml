@@ -1,4 +1,14 @@
 ---
 # tasks/main.yml
 
+- name: lineinfile | update licence key
+  lineinfile:
+    dest: "/etc/newrelic-infra.yml"
+    line: "{{ item.key }}: {{ item.value }}"
+    state: "present"
+    create: "yes"
+  with_items:
+    - { key: "display_name", value: "{{ hostname | default(ansible_hostname) }}" }
+    - { key: "license_key", value: "{{ newrelic.license }}" }
+
 - include: "{{ ansible_os_family }}.yml"

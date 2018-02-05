@@ -1,16 +1,6 @@
 ---
 # tasks/redhat-based.yml
 
-- name: lineinfile | update licence key
-  lineinfile:
-    dest: "/etc/newrelic-infra.yml"
-    line: "{{ item.key }}: {{ item.value }}"
-    state: "present"
-    create: "yes"
-  with_items:
-    - { key: "display_name", value: "{{ hostname }}" }
-    - { key: "license_key", value: "{{ newrelic.license }}" }
-
 - name: yum | add new relic repo key
   shell: "curl -o /etc/yum.repos.d/newrelic-infra.repo https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64/newrelic-infra.repo"
 

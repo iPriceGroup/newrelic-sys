@@ -1,16 +1,6 @@
 ---
 # tasks/debian-based.yml
 
-- name: lineinfile | update licence key
-  lineinfile:
-    dest: "/etc/newrelic-infra.yml"
-    line: "{{ item.key }}: {{ item.value }}"
-    state: "present"
-    create: "yes"
-  with_items:
-    - { key: "display_name", value: "{{ hostname | default(ansible_hostname) }}" }
-    - { key: "license_key", value: "{{ newrelic.license }}" }
-
 - name: apt_key | add newrelic repository key
   apt_key:
     url: "https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg"
