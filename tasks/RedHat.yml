@@ -1,0 +1,28 @@
+---
+# tasks/RedHat.yml
+
+- name: yum | add new relic repo key
+  shell: "curl -o /etc/yum.repos.d/newrelic-infra.repo https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64/newrelic-infra.repo"
+
+- name: yum | install packages
+  yum:
+    name: "{{ item }}"
+    state: "present"
+    update_cache: "yes"
+  with_items:
+    - "newrelic-infra"
+
+- name: user | add newrelic user to docker group if docker is presented
+  user:
+    name: "{{ item }}"
+    append: "yes"
+    groups: "docker"
+  with_items:
+    - "newrelic"
+  ignore_errors: "yes"
+
+- name: service | restart newrelic-sysmond daemon
+  service:
+    name: "newrelic-infra"
+    state: "restarted"
+    enabled: "yes"
